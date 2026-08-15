@@ -535,6 +535,12 @@ pub async fn prepare_declaration(
             ),
         });
     }
+    refresh::ensure_no_mem_wal(
+        native.dataset.get().await?.as_ref(),
+        "source table",
+        resolved.name(),
+    )
+    .await?;
     let source_schema = resolved.schema().await?;
     let (definition, mut fields) =
         plan(source_schema, resolved.name(), projections, filter, limit)?;
